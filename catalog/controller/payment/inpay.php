@@ -75,7 +75,7 @@ class ControllerPaymentInpay extends Controller
             header('HTTP/1.1 400 Payment Request Error');
             exit($message);
         } else {
-            $message = 'Somthing wrong in payment request, please try again';
+            $message = 'Unknown error, please try again later';
             header('HTTP/1.1 400 Payment Request Error');
             exit($message);
         }

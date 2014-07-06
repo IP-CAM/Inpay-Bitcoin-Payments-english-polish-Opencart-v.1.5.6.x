@@ -5,7 +5,3 @@
         </div>
     </div>
 </form>
-
-<script type="text/javascript">
-    //document.getElementById('inpay_form').submit();
-</script>
