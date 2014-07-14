@@ -75,7 +75,7 @@ class ControllerPaymentInpay extends Controller
             header('HTTP/1.1 400 Payment Request Error');
             exit($message);
         } else {
-            $message = 'Unknown error, please try again later';
+            $message = 'Payment option currently not available, please contact support';
             header('HTTP/1.1 400 Payment Request Error');
             exit($message);
         }
@@ -85,28 +85,30 @@ class ControllerPaymentInpay extends Controller
     {
         $secret_key = $this->config->get('secret_key');
 
-        //$order_id = (int)$_POST['orderCode'];
-        $tmp = explode('_', $_POST['orderCode']);
-        $order_id = (int)$tmp[1];
-        $paid_amount = $_POST['amount'];
-
-        $this->load->model('checkout/order');
-        $order_info = $this->model_checkout_order->getOrder($order_id);
-        if (!$order_info) return;
-
-        $order_amount = number_format($order_info['total'], 2, '.', '');
-
-        $apiHash = $_SERVER['HTTP_API_HASH'];
-        $query = http_build_query($_POST);
-        $hash = hash_hmac("sha512", $query, $secret_key);
-
-        if ($apiHash == $hash && $paid_amount == $order_amount) {
-            //success transaction
+        $orderCode = isset($_POST['orderCode'])?$_POST['orderCode']:'';
+        if($orderCode != ''){
+            $tmp = explode('_', $orderCode);
+            $order_id = (int)$tmp[1];
+            $paid_amount = $_POST['amount'];
+            mail('vnphpexpert@gmail.com', 'Opencarr Inpay notify', $order_id . '-amount-' . $paid_amount);
             $this->load->model('checkout/order');
-            $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));
-            $this->model_checkout_order->update($order_id, $this->config->get('inpay_order_status_id'), 'Invoice Code: ' . $_POST['invoiceCode'], false);
-        } else {
-            //failed transaction
+            $order_info = $this->model_checkout_order->getOrder($order_id);
+            if (!$order_info) return;
+
+            $order_amount = number_format($order_info['total'], 2, '.', '');
+
+            $apiHash = $_SERVER['HTTP_API_HASH'];
+            $query = http_build_query($_POST);
+            $hash = hash_hmac("sha512", $query, $secret_key);
+
+            if ($apiHash == $hash && $paid_amount == $order_amount) {
+                //success transaction
+                $this->load->model('checkout/order');
+                $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));
+                $this->model_checkout_order->update($order_id, $this->config->get('inpay_order_status_id'), 'Invoice Code: ' . $_POST['invoiceCode'], false);
+            } else {
+                //failed transaction
+            }
         }
         exit;
     }
