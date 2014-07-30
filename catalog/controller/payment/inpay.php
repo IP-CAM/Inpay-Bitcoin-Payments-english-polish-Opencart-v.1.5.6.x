@@ -13,7 +13,7 @@ class ControllerPaymentInpay extends Controller
 
         $api_key = $this->config->get('api_key');
         $secret_key = $this->config->get('secret_key');
-        $gateway_url = $this->config->get('gateway_url');
+        $gateway_url = ($this->config->get('gateway_url') !== "")? $this->config->get('gateway_url') : "https://inpay.pl/api/invoice/create";
 
         $orderCode = $this->session->data['order_id'];
         $amount = number_format($order_info['total'], 2, '.', '');
@@ -28,7 +28,8 @@ class ControllerPaymentInpay extends Controller
         }
         $product = rtrim($product, '; ');
 
-        $data = array("apiKey" => $api_key,
+        $data = array(
+            "apiKey" => $api_key,
             "amount" => $amount,
             "currency" => strtoupper($order_info['currency_code']),
             "optData" => '',
@@ -90,7 +91,6 @@ class ControllerPaymentInpay extends Controller
             $tmp = explode('_', $orderCode);
             $order_id = (int)$tmp[1];
             $paid_amount = $_POST['amount'];
-            mail('vnphpexpert@gmail.com', 'Opencarr Inpay notify', $order_id . '-amount-' . $paid_amount);
             $this->load->model('checkout/order');
             $order_info = $this->model_checkout_order->getOrder($order_id);
             if (!$order_info) return;
