@@ -13,7 +13,7 @@ $_['text_tranzila'] = '<img src="view/image/payment/inpay.png" alt="Bitcoin (InP
 // Entry
 $_['entry_api_key'] = 'API Key:';
 $_['entry_secret_key'] = 'Secret Key:';
-$_['entry_gateway_url'] = 'Gateway URL:';
+$_['entry_test_mode']    = 'Use Testnet:';
 
 $_['entry_order_status'] = 'Order Status:';
 $_['entry_geo_zone'] = 'Geo Zone:';
@@ -24,5 +24,4 @@ $_['entry_sort_order'] = 'Sort Order:';
 $_['error_permission'] = 'Warning: You do not have permission to modify!';
 $_['error_api_key'] = 'API Key required!';
 $_['error_secret_key'] = 'Secret Key required!';
-$_['error_gateway_url'] = 'Gateway URL required!';
 ?>

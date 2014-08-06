@@ -32,11 +32,16 @@
                     </tr>
 
                     <tr>
-                        <td><span class="required">*</span> <?php echo $entry_gateway_url; ?></td>
-                        <td><input type="text" name="gateway_url" value="<?php echo $gateway_url; ?>"/>
-                            <?php if ($error_gateway_url) { ?>
-                            <span class="error"><?php echo $error_gateway_url; ?></span>
-                            <?php } ?></td>
+                        <td><?php echo $entry_test_mode; ?></td>
+                        <td><select name="test_mode">
+                                <?php if ($test_mode) { ?>
+                                <option value="1" selected="selected"><?php echo $text_yes; ?></option>
+                                <option value="0"><?php echo $text_no; ?></option>
+                                <?php } else { ?>
+                                <option value="1"><?php echo $text_yes; ?></option>
+                                <option value="0" selected="selected"><?php echo $text_no; ?></option>
+                                <?php } ?>
+                            </select></td>
                     </tr>
 
                     <tr>

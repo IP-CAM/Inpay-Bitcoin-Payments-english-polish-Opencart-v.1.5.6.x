@@ -13,7 +13,12 @@ class ControllerPaymentInpay extends Controller
 
         $api_key = $this->config->get('api_key');
         $secret_key = $this->config->get('secret_key');
-        $gateway_url = ($this->config->get('gateway_url') !== "")? $this->config->get('gateway_url') : "https://inpay.pl/api/invoice/create";
+        $test_mode	= $this->config->get('test_mode');
+
+        if($test_mode == 1)
+            $gateway_url = 'http://paycoin.pl/api/invoice/create';
+        else
+            $gateway_url = 'https://inpay.pl/api/invoice/create';
 
         $orderCode = $this->session->data['order_id'];
         $amount = number_format($order_info['total'], 2, '.', '');

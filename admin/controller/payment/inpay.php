@@ -19,7 +19,7 @@ class ControllerPaymentInpay extends Controller
 
             $this->session->data['success'] = $this->language->get('text_success');
 
-            $this->redirect(HTTPS_SERVER . 'index.php?route=extension/payment&token=' . $this->session->data['token']);
+            $this->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
         }
 
         $this->data['heading_title'] = $this->language->get('heading_title');
@@ -32,7 +32,7 @@ class ControllerPaymentInpay extends Controller
 
         $this->data['entry_api_key'] = $this->language->get('entry_api_key');
         $this->data['entry_secret_key'] = $this->language->get('entry_secret_key');
-        $this->data['entry_gateway_url'] = $this->language->get('entry_gateway_url');
+        $this->data['entry_test_mode'] = $this->language->get('entry_test_mode');
 
         $this->data['entry_lang'] = $this->language->get('entry_lang');
         $this->data['entry_order_status'] = $this->language->get('entry_order_status');
@@ -63,36 +63,29 @@ class ControllerPaymentInpay extends Controller
             $this->data['error_secret_key'] = '';
         }
 
-        if (isset($this->error['gateway_url'])) {
-            $this->data['error_gateway_url'] = $this->error['gateway_url'];
-        } else {
-            $this->data['error_gateway_url'] = '';
-        }
-
-
         $this->document->breadcrumbs = array();
 
         $this->document->breadcrumbs[] = array(
-            'href' => HTTPS_SERVER . 'index.php?route=common/home&token=' . $this->session->data['token'],
-            'text' => $this->language->get('text_home'),
+            'href'      => $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL'),
+            'text'      => $this->language->get('text_home'),
             'separator' => FALSE
         );
 
         $this->document->breadcrumbs[] = array(
-            'href' => HTTPS_SERVER . 'index.php?route=extension/payment&token=' . $this->session->data['token'],
-            'text' => $this->language->get('text_payment'),
+            'href'      => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'),
+            'text'      => $this->language->get('text_payment'),
             'separator' => ' :: '
         );
 
         $this->document->breadcrumbs[] = array(
-            'href' => HTTPS_SERVER . 'index.php?route=payment/inpay&token=' . $this->session->data['token'],
-            'text' => $this->language->get('heading_title'),
+            'href'      => $this->url->link('payment/inpay', 'token=' . $this->session->data['token'], 'SSL'),
+            'text'      => $this->language->get('heading_title'),
             'separator' => ' :: '
         );
 
-        $this->data['action'] = HTTPS_SERVER . 'index.php?route=payment/inpay&token=' . $this->session->data['token'];
+        $this->data['action'] = $this->url->link('payment/inpay', 'token=' . $this->session->data['token'], 'SSL');
 
-        $this->data['cancel'] = HTTPS_SERVER . 'index.php?route=extension/payment&token=' . $this->session->data['token'];
+        $this->data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 
         if (isset($this->request->post['api_key'])) {
             $this->data['api_key'] = $this->request->post['api_key'];
@@ -106,10 +99,10 @@ class ControllerPaymentInpay extends Controller
             $this->data['secret_key'] = $this->config->get('secret_key');
         }
 
-        if (isset($this->request->post['gateway_url'])) {
-            $this->data['gateway_url'] = $this->request->post['gateway_url'];
+        if (isset($this->request->post['test_mode'])) {
+            $this->data['test_mode'] = $this->request->post['test_mode'];
         } else {
-            $this->data['gateway_url'] = $this->config->get('gateway_url');
+            $this->data['test_mode'] = $this->config->get('test_mode');
         }
 
         if (isset($this->request->post['inpay_order_status_id'])) {
@@ -164,9 +157,6 @@ class ControllerPaymentInpay extends Controller
         }
         if (!$this->request->post['secret_key']) {
             $this->error['secret_key'] = $this->language->get('error_secret_key');
-        }
-        if (!$this->request->post['gateway_url']) {
-            $this->error['gateway_url'] = $this->language->get('error_gateway_url');
         }
 
         if (!$this->error) {
